@@ -1,0 +1,9 @@
+---
+name: ChestShop
+main: tk.t11e.chestshop.main.Main
+version: '1.0'
+api-version: '1.15'
+author: booky10
+depend:
+  - Vault
+  - PaperT11EAPI
