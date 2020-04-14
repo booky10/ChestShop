@@ -13,9 +13,10 @@ import tk.t11e.chestshop.manager.SignShopManager;
 import java.io.File;
 import java.io.IOException;
 
+@SuppressWarnings("ResultOfMethodCallIgnored")
 public class Main extends JavaPlugin {
 
-    public static String PREFIX = "§7[§bCraftTMB§7]§c ";
+    public static final String PREFIX = "§7[§bCraftTMB§7]§c ";
     private final File shopSavesFile = new File(getDataFolder(), "chestSaves.yml");
     private FileConfiguration shopSaves;
     public static Economy economy;

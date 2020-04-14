@@ -28,12 +28,13 @@ import tk.t11e.chestshop.manager.ItemSorter;
 import tk.t11e.chestshop.manager.SignShopManager;
 
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.UUID;
 
 public class SignListener implements Listener {
 
-    public static HashMap<UUID, Block> confirmationUserSigns = new HashMap<>();
-    public static HashMap<UUID, Block> confirmationUserChests = new HashMap<>();
+    public static final HashMap<UUID, Block> confirmationUserSigns = new HashMap<>();
+    public static final HashMap<UUID, Block> confirmationUserChests = new HashMap<>();
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onSignPlace(SignChangeEvent event) {
@@ -51,13 +52,13 @@ public class SignListener implements Listener {
             player.sendMessage(Main.PREFIX + "In der Kiste darf kein Item oder nur mehrere gleiche sein!");
         else {
             try {
-                if (Integer.parseInt(event.getLine(1)) > 64) {
+                if (Integer.parseInt(Objects.requireNonNull(event.getLine(1))) > 64) {
                     player.sendMessage(Main.PREFIX + "Du kannst nicht mehr als 64 Items auf einmal verkaufen!");
                     player.playSound(player.getEyeLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1.5f, 0.25f);
                     return;
                 }
                 try {
-                    Double.parseDouble(event.getLine(2));
+                    Double.parseDouble(Objects.requireNonNull(event.getLine(2)));
                     /*if (isInventoryClear(chest.getInventory())) {
                         player.sendMessage(Main.PREFIX + "Als erstes muss mindestens ein Item dadrin sein! " +
                                 "Nachher kannst du aber noch nachfüllen!");
@@ -122,7 +123,7 @@ public class SignListener implements Listener {
     @EventHandler
     public void onShopUse(PlayerInteractEvent event) {
         if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) return;
-        if (!Tag.WALL_SIGNS.isTagged(event.getClickedBlock().getType())) return;
+        if (!Tag.WALL_SIGNS.isTagged(Objects.requireNonNull(event.getClickedBlock()).getType())) return;
         if (!SignShopManager.registeredSigns.contains(event.getClickedBlock())) return;
 
         SignShopManager.useShop((Sign) event.getClickedBlock().getState(), event.getPlayer());

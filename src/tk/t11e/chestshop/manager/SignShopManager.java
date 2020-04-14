@@ -18,13 +18,15 @@ import tk.t11e.chestshop.main.Main;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
+@SuppressWarnings("StringBufferReplaceableByString")
 public class SignShopManager {
 
-    public static List<Block> registeredChests = new ArrayList<>();
-    public static List<Block> registeredSigns = new ArrayList<>();
-    public static HashMap<Block, Block> chestSignMap = new HashMap<>();
-    public static HashMap<Block, Block> signChestMap = new HashMap<>();
+    public static final List<Block> registeredChests = new ArrayList<>();
+    public static final List<Block> registeredSigns = new ArrayList<>();
+    public static final HashMap<Block, Block> chestSignMap = new HashMap<>();
+    public static final HashMap<Block, Block> signChestMap = new HashMap<>();
 
     public static void registerShop(Sign sign) {
         if (!Tag.WALL_SIGNS.isTagged(sign.getType())) return;
@@ -62,14 +64,6 @@ public class SignShopManager {
 
         config.set("signChestMapKeys", blocksToStrings(signChestMap.keySet()));
         config.set("signChestMapValues", blocksToStrings(signChestMap.values()));
-        /*
-
-        TODO - saving - TESTING
-        TODO - loading - TESTING
-        TODO - using - TESTING
-        TODO - clearing lists - TESTING
-
-         */
     }
 
     public static void loadShops(FileConfiguration config) {
@@ -97,17 +91,17 @@ public class SignShopManager {
         if (!(shop.getLine(3).equals("Keine Items!") || shop.getLine(3).equals("Error!")))
             if (SignListener.containsInventoryOneItem(chestInventory))
                 if (!SignListener.isInventoryClear(chestInventory))
-                    if (chestInventory.getItem(0).getAmount() >= amount)
+                    if (Objects.requireNonNull(chestInventory.getItem(0)).getAmount() >= amount)
                         if (Main.economy.hasAccount(owner) && Main.economy.hasAccount(user))
                             if (Main.economy.has(user, cost))
                                 if (user.getInventory().firstEmpty() != -1) {
                                     Main.economy.depositPlayer(owner, cost);
                                     Main.economy.withdrawPlayer(user, cost);
 
-                                    ItemStack bought = chestInventory.getItem(0).clone();
+                                    ItemStack bought = Objects.requireNonNull(chestInventory.getItem(0)).clone();
                                     bought.setAmount(amount);
-                                    chestInventory.getItem(0)
-                                            .setAmount(chestInventory.getItem(0).getAmount() - amount);
+                                    Objects.requireNonNull(chestInventory.getItem(0))
+                                            .setAmount(Objects.requireNonNull(chestInventory.getItem(0)).getAmount() - amount);
                                     if (chestInventory.getItem(0) == null)
                                         shop.setLine(3, "Keine Items!");
                                     user.getInventory().addItem(bought);
@@ -158,7 +152,7 @@ public class SignShopManager {
                     } else {
                         System.out.println(2);
                         ItemStack firstItem = chest.getInventory().getItem(0);
-                        if (firstItem.hasItemMeta())
+                        if (Objects.requireNonNull(firstItem).hasItemMeta())
                             sign.setLine(3, firstItem.getItemMeta().getDisplayName());
                         else
                             sign.setLine(3, firstItem.getType().getKey().getKey().replaceAll("_",
